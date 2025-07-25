@@ -35,28 +35,32 @@ def check_win(board, player):
     # Побочная диагональ
     if all(board[i][2 - i] == player for i in range(3)):
         return True
-
     return False
 
+
+def check_draw(board):
+    flag = True
+    for row in board:
+        if " " in row:
+            flag = False
+    return flag
 
 # Основная игра
 player = "X"
 board = [[" " for i in range(3)] for j in range(3)]
 print("Начало игры")
 print_board(board)
-while not (check_win(board, "X") or check_win(board, "0")):
+end_game = False
+while not end_game:
     row, col = get_player_move()
     board[row][col] = player
-
-    if player == "X":
-        player = "0"
-    else:
-        player = "X"
     print_board(board)
-if player == "X":
-    player = "0"
-else:
-    player = "X"
-    print(f"Выиграл игрок {player}")
 
-
+    if check_win(board, player):
+        print(f"Выиграл игрок {player}")
+        end_game = True
+    elif check_draw(board):
+        print("Ничья")
+        end_game = True
+    else:
+        player = "0" if player == "X" else "X"
